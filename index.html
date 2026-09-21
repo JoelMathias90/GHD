@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GHD</title>
+    <style>
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: rgba(0, 0, 0, 0.13);
+            padding: 0;
+            margin: 0;
+        }
+        main {
+            display: flex;
+            flex-direction: column;
+            height: 90vh;
+            width: 80%;
+            max-width: 500px;
+            gap: 1em;
+            background-color: white;
+            padding: 2em;
+            box-sizing: border-box;
+            border-radius: 1em;
+            align-items: center;
+        }
+
+        h1 {
+            letter-spacing: 1em;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+
+
+        <h1>GHD</h1>
+
+        <span>Nenhum Hábito foi adicionado!</span>
+        <ul id="lista-habitos"></ul>
+
+        <p id="progresso-habitos">Concluidos: 0 / 0</p>
+
+        <button id="criar-habito" type="button">Criar Hábito</button>
+
+        <form id="form-habito" action="">
+            <input type="text" name="nome-habito" id="nome-habito" placeholder="Hábito">
+            <fieldset id="frequencia-habito">
+                <legend>Frequência</legend>
+                <label for="domingo">D</label>
+                <input id="domingo" type="checkbox" name="dia-semana" value="domingo">
+                <label for="segunda">S</label>
+                <input id="segunda" type="checkbox" name="dia-semana" value="segunda">
+                <label for="terca">T</label>
+                <input id="terca" type="checkbox" name="dia-semana" value="terca">
+                <label for="quarta">Q</label>
+                <input id="quarta" type="checkbox" name="dia-semana">
+                <label for="quinta">Q</label>
+                <input type="checkbox" name="dia-semana" id="quinta">
+                <label for="sexta">S</label>
+                <input type="checkbox" name="dia-semana" id="sexta">
+                <label for="sabado">S</label>
+                <input type="checkbox" name="dia-semana" id="sabado">
+            </fieldset>
+
+            <div>
+                <button type="submit">Adicionar</button>
+                <button type="reset">Cancelar</button>
+            </div>
+
+        </form>
+    </main>
+</body>
+
+</html>
