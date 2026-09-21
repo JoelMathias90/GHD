@@ -5,23 +5,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GHD</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <main id="painel-habitos">
-        <h1 id="titulo">GHD</h1>
+    <main id="painel-habitos" class="painel-habitos">
+        <h1 id="titulo" class="titulo">GHD</h1>
 
-        <span id="mensagem-vazio">Nenhum Hábito foi adicionado!</span>
-        <ul id="lista-habitos"></ul>
+        <div class="layout-lista">
+            <span id="mensagem-vazio" class="mensagem-vazio">Nenhum Hábito foi adicionado!</span>
+            <ul id="lista-habitos" class="lista-habitos"></ul>
+        </div>
 
         <p id="progresso-habitos">Concluidos: 0 / 0</p>
 
-        <button id="criar-habito" type="button">Criar Hábito</button>
+        <button id="criar-habito" class="criar-habito" type="button">Criar Hábito</button>
 
-        <form id="form-habito">
-            <input id="nome-habito" type="text" name="nome-habito"  placeholder="Hábito">
+        <form id="form-habito" class="form-habito">
 
-            <fieldset id="frequencia-habito">
+            <h1 class="titulo-form">Criando Hábitos</h1>
+            
+            <input id="nome-habito" class="nome-habito" type="text" name="nome-habito"  placeholder="Hábito">
+
+            <fieldset id="frequencia-habito" class="frequencia-habito">
                 <legend>Frequência</legend>
                 <label for="domingo">D</label>
                 <input id="domingo" type="checkbox" name="dia-semana" value="domingo">
@@ -39,9 +45,9 @@
                 <input id="sabado" type="checkbox" name="dia-semana" value="sabado">
             </fieldset>
 
-            <div>
-                <button id="adicionar-habito" type="submit">Adicionar</button>
-                <button id="cancelar-habito" type="reset">Cancelar</button>
+            <div class="layout-botoes">
+                <button id="adicionar-habito" class="adicionar-habito" type="submit">Adicionar</button>
+                <button id="cancelar-habito" class="cancelar-habito" type="reset">Cancelar</button>
             </div>
 
         </form>
