@@ -179,3 +179,23 @@ body {
 .escondido {
     display: none;
 }
+
+.modal {
+    display: none;
+    align-self: center;
+    bottom: 3em;
+    flex-direction: column;
+    justify-content: center;
+    position: absolute;
+    border-radius: 1em;
+}
+
+.texto-modal {
+    text-align: center;
+    font-size: x-large;
+    color: red;
+}
+
+.visible {
+    display: flex;
+}
