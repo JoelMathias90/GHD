@@ -32,6 +32,7 @@ adicionar_habito.addEventListener("click", (event) => {
     }
 
     criarHabito(obj_habito)
+    form_habito.reset()
     form_habito.classList.add("escondido")
 })
 
@@ -78,3 +79,8 @@ function validarCampos(nome, dia) {
         return { valido: true, msg: "Criado com sucesso!" }
     }
 }
+
+const cancelar_habito = document.getElementById("cancelar-habito")
+cancelar_habito.addEventListener("click", (e) => {
+    form_habito.classList.add("escondido")
+})
