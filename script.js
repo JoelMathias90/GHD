@@ -1,74 +1,103 @@
-const btn_criar = document.getElementById("criar-habito")
-const form_habito = document.getElementById("form-habito")
-const adicionar_habito = document.getElementById("adicionar-habito")
-const nome_habito = document.getElementById("nome-habito")
+const habitos = [
+    {
+        id: crypto.randomUUID(),
+        titulo: "Reunião colaborativa",
+        frequencia: ["segunda"],
+        concluido: false
+    }
+]
 
+const form_habito = document.getElementById("form-habito")
+
+function renderizarHabitos() {
+    const lista_habitos = document.getElementById("lista-habitos")
+    const mensagem_vazio = document.getElementById("mensagem-vazio")
+
+    lista_habitos.replaceChildren()
+
+    if (habitos.length > 0) {
+        mensagem_vazio.classList.add("escondido")
+        lista_habitos.classList.remove("escondido")
+    }
+
+    function criarComponenteHabito(habito) {
+        const { id, titulo, frequencia, concluido } = habito
+
+        const item_habito = document.createElement("li")
+        item_habito.id = crypto.randomUUID()
+        item_habito.className = "item-habito"
+
+        const texto_titulo = document.createElement("p")
+        texto_titulo.textContent = titulo
+        item_habito.appendChild(texto_titulo)
+
+        const lista_frequencia = document.createElement("ul")
+        lista_frequencia.className = "frequencia-detalhe"
+
+        function criarDetalheFrenquencia(dia) {
+            const item_frequencia = document.createElement("li");
+            const first_caracter = dia.charAt(0).toUpperCase();
+            item_frequencia.textContent = first_caracter;
+            lista_frequencia.appendChild(item_frequencia)
+        }
+
+        frequencia.forEach(dia => {
+            criarDetalheFrenquencia(dia)
+        });
+
+        item_habito.appendChild(lista_frequencia)
+
+        return item_habito
+    }
+
+    habitos.forEach(habito => {
+        const item_habito = criarComponenteHabito(habito)
+        lista_habitos.appendChild(item_habito)
+    })
+}
+
+renderizarHabitos()
+
+const btn_criar = document.getElementById("criar-habito")
 btn_criar.addEventListener("click", () => {
+    const nome_habito = document.getElementById("nome-habito")
     form_habito.classList.remove("escondido")
     nome_habito.focus()
 })
 
-const obj_habito = {
-    nome: "",
-    dia: []
-}
+const adicionar_habito = document.getElementById("adicionar-habito")
 
 adicionar_habito.addEventListener("click", (event) => {
     event.preventDefault()
     const data = new FormData(form_habito)
 
-    obj_habito.nome = data.get("nome-habito")
-    obj_habito.dia = data.getAll("dia-semana")
+    const titulo = data.get("nome-habito")
+    const frequencia = data.getAll("dia-semana")
 
-    const aprovacao = validarCampos(obj_habito.nome, obj_habito.dia)
-    
-    if (!aprovacao.valido) {
+    const validacao = validarCampos(titulo, frequencia)
+
+    if (!validacao.valido) {
         const modal = document.getElementById("modal")
         const texto_modal = document.getElementById("texto-modal")
-        texto_modal.textContent = aprovacao.msg
+        texto_modal.textContent = validacao.msg
 
         modal.classList.add("visible")
         return
     }
 
-    criarHabito(obj_habito)
+    const habito = {
+        id: crypto.randomUUID(),
+        titulo,
+        frequencia,
+        concluido: false
+    }
+
+    habitos.push(habito)
+
+    renderizarHabitos()
     form_habito.reset()
     form_habito.classList.add("escondido")
 })
-
-function criarHabito(data) {
-    const { nome, dia } = data
-
-    const lista_habitos = document.getElementById("lista-habitos")
-    lista_habitos.classList.remove("escondido")
-
-    const mensagem_vazio = document.getElementById("mensagem-vazio")
-    mensagem_vazio.classList.add("escondido")
-
-    const item = document.createElement("li")
-    item.className = "item-habito"
-
-    const h = document.createElement("h1")
-    h.textContent = nome
-
-    const ul = document.createElement("ul")
-    ul.className = "frequencia-detalhe"
-
-    for (i = 0; i < dia.length; i++) {
-        const li = document.createElement("li")
-        const span = document.createElement("span")
-
-        const first_caracter = dia[i].charAt(0).toUpperCase()
-        span.textContent = first_caracter
-
-        li.appendChild(span)
-        ul.appendChild(li)
-    }
-
-    item.appendChild(h)
-    item.appendChild(ul)
-    lista_habitos.appendChild(item)
-}
 
 function validarCampos(nome, dia) {
     if (nome === "") {
