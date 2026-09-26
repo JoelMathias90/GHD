@@ -199,3 +199,7 @@ body {
 .visible {
     display: flex;
 }
+
+.checkbox-concluido {
+    background-color: green;
+}

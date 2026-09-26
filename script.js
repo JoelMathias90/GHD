@@ -24,10 +24,17 @@ function renderizarHabitos() {
         const { id, titulo, frequencia, concluido } = habito
 
         const item_habito = document.createElement("li")
-        item_habito.id = crypto.randomUUID()
+        item_habito.id = id
         item_habito.className = "item-habito"
 
+        const checkbox_concluido = document.createElement("input")
+        checkbox_concluido.type = "checkbox"
+        checkbox_concluido.id = "checkbox-concluido"
+        item_habito.appendChild(checkbox_concluido)
+        checkbox_concluido.addEventListener("click", marcarHabito)
+
         const texto_titulo = document.createElement("p")
+        texto_titulo.id = "texto-titulo"
         texto_titulo.textContent = titulo
         item_habito.appendChild(texto_titulo)
 
@@ -50,9 +57,12 @@ function renderizarHabitos() {
         return item_habito
     }
 
+
+
     habitos.forEach(habito => {
         const item_habito = criarComponenteHabito(habito)
         lista_habitos.appendChild(item_habito)
+        estilizarHabitoConcluido(habito.id, habito.concluido)
     })
 }
 
@@ -113,3 +123,24 @@ const cancelar_habito = document.getElementById("cancelar-habito")
 cancelar_habito.addEventListener("click", (e) => {
     form_habito.classList.add("escondido")
 })
+
+
+function marcarHabito(event) {
+    const item = event.target.parentNode
+    const habito = habitos.find(({ id }) => id === item.id)
+    habito.concluido = !habito.concluido
+
+    estilizarHabitoConcluido(habito.id, habito.concluido)
+}
+
+function estilizarHabitoConcluido(itemId, concluido) {
+    const item = document.getElementById(itemId)
+        
+    if (concluido) {
+        item.classList.add("checkbox-concluido")
+        item.children[0].checked = true
+    } else {
+        item.classList.remove("checkbox-concluido")
+    }
+    
+}
