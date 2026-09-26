@@ -34,14 +34,19 @@ body {
     position: relative;
     display: flex;
     flex-direction: column;
-    height: 300px;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
     align-self: stretch;
-    padding: 1em;
+    padding: 0.5em 1em;
     border: solid 1px;
     border-radius: .75em;
     background-color: white;
+    overflow-y: auto;
+    box-sizing: border-box;
+    height: 300px;
+}
+.layout-lista::-webkit-scrollbar {
+    display: none;
 }
 
 .mensagem-vazio {
@@ -51,31 +56,32 @@ body {
 .lista-habitos {
     display: flex;
     flex-direction: column;
-    gap: .5em;
-    margin: 0;
     padding: 0;
     width: 100%;
-    height: 100%;
+    margin: 0;
 }
 
 .item-habito {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    height: 50px;
     padding: 1em;
+    justify-content: space-between;
     border: solid 1px;
-    box-sizing: border-box;
+    margin: 0.25em 0;
 }
 
-.item-habito h1 {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    height: 100%;
+.item-habito input {
     margin: 0;
-    font-size: x-large;
+    margin-right: 1em;
+}
+
+.item-habito p {
+    display: flex;
+    margin: 0;
+    margin-right: auto;
+}
+
+.item-habito ul {
+    padding: 0;
 }
 
 .frequencia-detalhe {
@@ -202,4 +208,43 @@ body {
 
 .checkbox-concluido {
     background-color: green;
+    color: white;
+    text-decoration: line-through;
+}
+
+.barra-progresso {
+    position: relative;
+    display: flex;
+    gap: 1em;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 1.5em;
+    padding: 2px;
+    border-radius: 1em;
+    color: black;
+    box-sizing: border-box;
+    border: solid 1px;
+    background-color: white;
+    overflow: hidden;
+}
+
+.barra-preenchida {
+    position: absolute;
+    display: flex;
+    justify-content: start;
+    left: 0;
+    height: 100%;
+    background-color: rgb(51, 184, 51);
+    transition: 1s;
+
+}
+
+.barra-progresso p {
+    z-index: 1;
+}
+
+.progresso {
+    margin-left: 1em;
+    z-index: 1;
 }

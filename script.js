@@ -3,9 +3,11 @@ const habitos = [
         id: crypto.randomUUID(),
         titulo: "Reunião colaborativa",
         frequencia: ["segunda"],
-        concluido: false
+        datasConcluidas: []
     }
 ]
+
+renderizarHabitos()
 
 const form_habito = document.getElementById("form-habito")
 
@@ -57,16 +59,18 @@ function renderizarHabitos() {
         return item_habito
     }
 
-
+    const dateNow = new Date()
+    const date = dateNow.getFullYear()+"/"+dateNow.getMonth()+"/"+dateNow.getDate()
 
     habitos.forEach(habito => {
         const item_habito = criarComponenteHabito(habito)
         lista_habitos.appendChild(item_habito)
-        estilizarHabitoConcluido(habito.id, habito.concluido)
+        estilizarHabitoConcluido(habito.id, habito.datasConcluidas, date)
     })
-}
 
-renderizarHabitos()
+    atualizarProgresso(date)
+
+}
 
 const btn_criar = document.getElementById("criar-habito")
 btn_criar.addEventListener("click", () => {
@@ -99,7 +103,7 @@ adicionar_habito.addEventListener("click", (event) => {
         id: crypto.randomUUID(),
         titulo,
         frequencia,
-        concluido: false
+        datasConcluidas: []
     }
 
     habitos.push(habito)
@@ -126,21 +130,38 @@ cancelar_habito.addEventListener("click", (e) => {
 
 
 function marcarHabito(event) {
-    const item = event.target.parentNode
-    const habito = habitos.find(({ id }) => id === item.id)
-    habito.concluido = !habito.concluido
+    const itemId = event.target.parentNode.id
+    const habito = habitos.find((item) => item.id == itemId) 
 
-    estilizarHabitoConcluido(habito.id, habito.concluido)
+    const dateNow = new Date()
+    const date = dateNow.getFullYear()+"/"+dateNow.getMonth()+"/"+dateNow.getDate()
+
+    if (!habito.datasConcluidas.includes(date)) habito.datasConcluidas.push(date)
+    else habito.datasConcluidas.shift()
+    
+    estilizarHabitoConcluido(habito.id, habito.datasConcluidas, date)
+    atualizarProgresso(date)
 }
 
-function estilizarHabitoConcluido(itemId, concluido) {
-    const item = document.getElementById(itemId)
-        
-    if (concluido) {
+function estilizarHabitoConcluido(id, datasConcluidas, date) {
+    const item = document.getElementById(id)   
+    
+    if (datasConcluidas.includes(date)) {
         item.classList.add("checkbox-concluido")
         item.children[0].checked = true
     } else {
         item.classList.remove("checkbox-concluido")
     }
+}
+
+function atualizarProgresso(date) {
+    const barra_preenchida = document.getElementById("barra-preenchida")
+    const progresso = document.getElementById("progresso")
+    const qtd_habitos = habitos.length    
+    const concluidos = habitos.filter(habito => habito.datasConcluidas.includes(date))   
+    const qtd_concluidos = concluidos.length
+    console.log("concluidos: "+qtd_concluidos+", total: "+ qtd_habitos);
     
+    progresso.textContent = qtd_concluidos + " / " + qtd_habitos
+    barra_preenchida.style.width = `${qtd_concluidos / qtd_habitos * 100}%`
 }
