@@ -13,44 +13,45 @@
         <h1 id="titulo" class="titulo">GHD</h1>
 
         <div class="layout-lista">
-            <span id="mensagem-vazio" class="mensagem-vazio">Nenhum Hábito foi adicionado!</span>
-            <ul id="lista-habitos" class="lista-habitos escondido"></ul>
+            <ul id="listHabits" class="listHabits"></ul>
         </div>
 
-        <div id="barra-progresso" class="barra-progresso">
-            <div id="barra-preenchida" class="barra-preenchida"></div> 
-            <p>Hábitos concluídos: </p><span id="progresso" class="progresso"></span>
+        <div id="progressContainer" class="progressContainer">
+            <div id="progressBar" class="progressBar"></div>
+            <div class="progressCountDiv">
+                <p>Hábitos concluídos: </p><span id="progressCount" class="progressCount"></span>
+            </div>
         </div>
 
-        <button id="criar-habito" class="criar-habito" type="button">Criar Hábito</button>
+        <button id="addHabitButton" class="addHabitButton" type="button">Adicionar Hábito</button>
 
-        <form id="form-habito" class="form-habito escondido">
+        <form id="addHabitForm" class="addHabitForm">
 
             <h1 class="titulo-form">Criando Hábitos</h1>
 
-            <input id="nome-habito" class="nome-habito" type="text" name="nome-habito" placeholder="Hábito">
+            <input id="habitTitleInput" class="habitTitleInput" type="text" name="nome-habito" placeholder="Hábito">
 
-            <fieldset id="frequencia-habito" class="frequencia-habito">
+            <fieldset id="habitFrequencyFieldset" class="habitFrequencyFieldset">
                 <legend>Frequência</legend>
                 <label for="domingo">D</label>
-                <input id="domingo" type="checkbox" name="dia-semana" value="domingo">
+                <input id="domingo" type="checkbox" name="habitFrequencyInput" value="0">
                 <label for="segunda">S</label>
-                <input id="segunda" type="checkbox" name="dia-semana" value="segunda">
+                <input id="segunda" type="checkbox" name="habitFrequencyInput" value="1">
                 <label for="terca">T</label>
-                <input id="terca" type="checkbox" name="dia-semana" value="terca">
+                <input id="terca" type="checkbox" name="habitFrequencyInput" value="2">
                 <label for="quarta">Q</label>
-                <input id="quarta" type="checkbox" name="dia-semana" value="quarta">
+                <input id="quarta" type="checkbox" name="habitFrequencyInput" value="3">
                 <label for="quinta">Q</label>
-                <input id="quinta" type="checkbox" name="dia-semana" value="quinta">
+                <input id="quinta" type="checkbox" name="habitFrequencyInput" value="4">
                 <label for="sexta">S</label>
-                <input id="sexta" type="checkbox" name="dia-semana" value="sexta">
+                <input id="sexta" type="checkbox" name="habitFrequencyInput" value="5">
                 <label for="sabado">S</label>
-                <input id="sabado" type="checkbox" name="dia-semana" value="sabado">
+                <input id="sabado" type="checkbox" name="habitFrequencyInput" value="6">
             </fieldset>
 
             <div class="layout-botoes">
-                <button id="adicionar-habito" class="adicionar-habito" type="submit">Adicionar</button>
-                <button id="cancelar-habito" class="cancelar-habito" type="reset">Cancelar</button>
+                <button id="submitHabitButton" class="submitHabitButton" type="submit">Criar</button>
+                <button id="cancelHabitButton" class="cancelHabitButton" type="reset">Cancelar</button>
             </div>
 
             <div id="modal" class="modal">

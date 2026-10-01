@@ -1,167 +1,142 @@
-const habitos = [
+const habits = [
     {
         id: crypto.randomUUID(),
-        titulo: "Reunião colaborativa",
-        frequencia: ["segunda"],
-        datasConcluidas: []
+        title: "Reunião colaborativa",
+        frequency: ["0", '3', "6"],
+        completedDates: []
     }
 ]
 
-renderizarHabitos()
+const listHabits = document.getElementById("listHabits")
+const progressContainer = document.getElementById("progressContainer")
+const progressBar = document.getElementById("progressBar")
+const progressCount = document.getElementById("progressCount")
+const addHabitButton = document.getElementById("addHabitButton")
+const addHabitForm = document.getElementById("addHabitForm")
+const habitTitleInput = document.getElementById("habitTitleInput")
+const habitFrequencyInputs = document.getElementsByName("habitFrequencyInput")
+const submitHabitButton = document.getElementById("submitHabitButton")
+const cancelHabitButton = document.getElementById("cancelHabitButton")
+const currentDate = new Date()
+const currentDateFormatted = currentDate.toLocaleDateString()
+const frequencyDays = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"]
 
-const form_habito = document.getElementById("form-habito")
+function createHabitElement(habit) {
+    const { id, title, frequency } = habit
 
-function renderizarHabitos() {
-    const lista_habitos = document.getElementById("lista-habitos")
-    const mensagem_vazio = document.getElementById("mensagem-vazio")
+    const li = document.createElement("li")
+    const input = document.createElement("input")
+    const p = document.createElement("p")
+    const div = document.createElement("div")
+    frequencyDays.forEach((value, index) => {
+        const dayContainer = document.createElement("div")
+        const dayPoint = document.createElement("div")
+        const span = document.createElement("span")
 
-    lista_habitos.replaceChildren()
+        dayContainer.className = "dayContainer"
+        dayPoint.className = "dayPoint"
+        span.textContent = value.charAt(0)
 
-    if (habitos.length > 0) {
-        mensagem_vazio.classList.add("escondido")
-        lista_habitos.classList.remove("escondido")
-    }
+        dayContainer.append(dayPoint, span)
+        div.append(dayContainer)
 
-    function criarComponenteHabito(habito) {
-        const { id, titulo, frequencia, concluido } = habito
-
-        const item_habito = document.createElement("li")
-        item_habito.id = id
-        item_habito.className = "item-habito"
-
-        const checkbox_concluido = document.createElement("input")
-        checkbox_concluido.type = "checkbox"
-        checkbox_concluido.id = "checkbox-concluido"
-        item_habito.appendChild(checkbox_concluido)
-        checkbox_concluido.addEventListener("click", marcarHabito)
-
-        const texto_titulo = document.createElement("p")
-        texto_titulo.id = "texto-titulo"
-        texto_titulo.textContent = titulo
-        item_habito.appendChild(texto_titulo)
-
-        const lista_frequencia = document.createElement("ul")
-        lista_frequencia.className = "frequencia-detalhe"
-
-        function criarDetalheFrenquencia(dia) {
-            const item_frequencia = document.createElement("li");
-            const first_caracter = dia.charAt(0).toUpperCase();
-            item_frequencia.textContent = first_caracter;
-            lista_frequencia.appendChild(item_frequencia)
+        if (frequency.includes(index.toString())) {
+            dayPoint.classList.add("onDayPoint")
+            span.classList.add("onDay")
         }
 
-        frequencia.forEach(dia => {
-            criarDetalheFrenquencia(dia)
-        });
-
-        item_habito.appendChild(lista_frequencia)
-
-        return item_habito
-    }
-
-    const dateNow = new Date()
-    const date = dateNow.getFullYear()+"/"+dateNow.getMonth()+"/"+dateNow.getDate()
-
-    habitos.forEach(habito => {
-        const item_habito = criarComponenteHabito(habito)
-        lista_habitos.appendChild(item_habito)
-        estilizarHabitoConcluido(habito.id, habito.datasConcluidas, date)
     })
 
-    atualizarProgresso(date)
+    li.className = "listItem"
+    li.dataset.id = id
+    input.type = "checkbox"
+    p.className = "itemTitle"
+    p.textContent = title
+    div.className = "frequencyContainer"
 
+    renderHabit(habit, li)
+
+    li.append(input, p, div)
+    return li
 }
 
-const btn_criar = document.getElementById("criar-habito")
-btn_criar.addEventListener("click", () => {
-    const nome_habito = document.getElementById("nome-habito")
-    form_habito.classList.remove("escondido")
-    nome_habito.focus()
+function renderListHabits() {
+    listHabits.replaceChildren()
+    habits.forEach((habit) => {
+        const habitItem = createHabitElement(habit)
+        listHabits.appendChild(habitItem)
+    })
+}
+renderListHabits()
+
+function toggleHabitCompletion(habit) {
+    if (!habit.completedDates.includes(currentDateFormatted)) {
+        habit.completedDates.push(currentDateFormatted)
+    } else {
+        habit.completedDates = habit.completedDates.filter((completed) => completed !== currentDateFormatted)
+    }
+}
+
+function addHabit(habit) {
+    habits.push(habit)
+    const newHabit = createHabitElement(habit)
+    listHabits.appendChild(newHabit)
+    addHabitForm.reset()
+    addHabitForm.classList.remove("open")
+    listHabits.classList.add("open")
+}
+
+function renderHabit(habit, item) {
+    if (habit.completedDates.includes(currentDateFormatted)) {
+        item.classList.add("completed")
+        item.checked = true
+    } else item.classList.remove("completed")
+}
+
+function updateProgressBar() {
+    const goal = habits.filter((habit) => habit.frequency.includes(currentDate.getDay().toString()))
+    const progress = goal.filter((habit) => habit.completedDates.includes(currentDateFormatted))
+    const progressRate = goal.length > 0 ? (progress.length / goal.length) * 100 : 0
+    progressCount.textContent = progress.length + "  /  " + goal.length
+    progressBar.style.width = `${progressRate}%`
+}
+updateProgressBar()
+
+addHabitButton.addEventListener("click", () => {
+    addHabitForm.classList.add("open")
 })
 
-const adicionar_habito = document.getElementById("adicionar-habito")
-
-adicionar_habito.addEventListener("click", (event) => {
+submitHabitButton.addEventListener("click", (event) => {
     event.preventDefault()
-    const data = new FormData(form_habito)
+    const title = habitTitleInput.value
+    const frequency = []
+    habitFrequencyInputs.forEach(item => {
+        if (item.checked) frequency.push(item.value)
+    })
 
-    const titulo = data.get("nome-habito")
-    const frequencia = data.getAll("dia-semana")
-
-    const validacao = validarCampos(titulo, frequencia)
-
-    if (!validacao.valido) {
-        const modal = document.getElementById("modal")
-        const texto_modal = document.getElementById("texto-modal")
-        texto_modal.textContent = validacao.msg
-
-        modal.classList.add("visible")
-        return
-    }
-
-    const habito = {
+    const habit = {
         id: crypto.randomUUID(),
-        titulo,
-        frequencia,
-        datasConcluidas: []
+        title,
+        frequency,
+        completedDates: []
     }
 
-    habitos.push(habito)
-
-    renderizarHabitos()
-    form_habito.reset()
-    form_habito.classList.add("escondido")
+    addHabit(habit)
+    updateProgressBar()
 })
 
-function validarCampos(nome, dia) {
-    if (nome === "") {
-        return { valido: false, msg: "Digite um nome para o hábito!" }
-    } else if (dia.length === 0) {
-        return { valido: false, msg: "Selecione uma frequência!" }
-    } else {
-        return { valido: true, msg: "Criado com sucesso!" }
-    }
-}
-
-const cancelar_habito = document.getElementById("cancelar-habito")
-cancelar_habito.addEventListener("click", (e) => {
-    form_habito.classList.add("escondido")
+cancelHabitButton.addEventListener("click", () => {
+    addHabitForm.classList.remove("open")
 })
 
+listHabits.addEventListener("click", (event) => {
+    if (event.target.matches(('input[type="checkbox"]'))) {
+        const item = event.target.closest(".listItem")
+        const itemId = item.dataset.id
+        const habit = habits.find((habit) => habit.id === itemId)
 
-function marcarHabito(event) {
-    const itemId = event.target.parentNode.id
-    const habito = habitos.find((item) => item.id == itemId) 
-
-    const dateNow = new Date()
-    const date = dateNow.getFullYear()+"/"+dateNow.getMonth()+"/"+dateNow.getDate()
-
-    if (!habito.datasConcluidas.includes(date)) habito.datasConcluidas.push(date)
-    else habito.datasConcluidas.shift()
-    
-    estilizarHabitoConcluido(habito.id, habito.datasConcluidas, date)
-    atualizarProgresso(date)
-}
-
-function estilizarHabitoConcluido(id, datasConcluidas, date) {
-    const item = document.getElementById(id)   
-    
-    if (datasConcluidas.includes(date)) {
-        item.classList.add("checkbox-concluido")
-        item.children[0].checked = true
-    } else {
-        item.classList.remove("checkbox-concluido")
+        toggleHabitCompletion(habit)
+        renderHabit(habit, item)
+        updateProgressBar()
     }
-}
-
-function atualizarProgresso(date) {
-    const barra_preenchida = document.getElementById("barra-preenchida")
-    const progresso = document.getElementById("progresso")
-    const qtd_habitos = habitos.length    
-    const concluidos = habitos.filter(habito => habito.datasConcluidas.includes(date))   
-    const qtd_concluidos = concluidos.length
-    console.log("concluidos: "+qtd_concluidos+", total: "+ qtd_habitos);
-    
-    progresso.textContent = qtd_concluidos + " / " + qtd_habitos
-    barra_preenchida.style.width = `${qtd_concluidos / qtd_habitos * 100}%`
-}
+})

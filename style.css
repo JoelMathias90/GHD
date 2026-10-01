@@ -1,3 +1,9 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
     position: relative;
     display: flex;
@@ -45,15 +51,13 @@ body {
     box-sizing: border-box;
     height: 300px;
 }
+
 .layout-lista::-webkit-scrollbar {
     display: none;
 }
 
-.mensagem-vazio {
-    display: inline;
-}
-
-.lista-habitos {
+.listHabits {
+    position: relative;
     display: flex;
     flex-direction: column;
     padding: 0;
@@ -61,7 +65,7 @@ body {
     margin: 0;
 }
 
-.item-habito {
+.listItem {
     display: flex;
     padding: 1em;
     justify-content: space-between;
@@ -69,45 +73,14 @@ body {
     margin: 0.25em 0;
 }
 
-.item-habito input {
-    margin: 0;
-    margin-right: 1em;
-}
-
-.item-habito p {
-    display: flex;
-    margin: 0;
+.listItem p {
+    margin-left: 1em;
     margin-right: auto;
 }
 
-.item-habito ul {
-    padding: 0;
-}
-
-.frequencia-detalhe {
-    display: flex;
-    flex-direction: row;
-    list-style: none;
-    gap: 1em;
-}
-
-.frequencia-detalhe li {
-    display: flex;
-}
-
-.criar-habito {
-    padding: 1em;
-    width: 200px;
-    background-color: rgb(44, 152, 224);
-    border: none;
-    color: white;
-    font-size: medium;
-    cursor: pointer;
-}
-
-.form-habito {
+.addHabitForm {
     position: absolute;
-    display: flex;
+    display: none;
     flex-direction: column;
     padding: 2em;
     height: 700px;
@@ -123,128 +96,68 @@ body {
     gap: 2em;
 }
 
-.titulo-form {
-    display: flex;
-    align-self: center;
-    letter-spacing: .5em;
-}
-
-.nome-habito {
-    padding: 1em;
-    letter-spacing: 2px;
-    color: black;
-    font-size: large;
-    border: 0;
-    border-bottom: 2px solid;
-}
-
-.frequencia-habito {
-    display: flex;
-    justify-content: space-around;
-    padding: 1em;
-}
-
-.frequencia-habito legend {
-    font-size: large;
-    letter-spacing: 2px;
-}
-
-.frequencia-habito input {
-    margin: 0;
-    width: 40px;
-}
-
-.layout-botoes {
-    display: flex;
-    gap: 1em;
-    justify-content: center;
-}
-
-.adicionar-habito,
-.cancelar-habito {
+.progressContainer {
+    position: relative;
     display: flex;
     justify-content: center;
-    padding: 1em;
-    gap: 1em;
-    width: 200px;
-    border: none;
-    cursor: pointer;
-    color: white;
-    font-size: medium;
-}
-
-.adicionar-habito {
-    background-color: blue;
-}
-
-.cancelar-habito {
-    color: black;
+    width: 100%;
+    height: 1.25em;
     border: solid 1px;
-}
-
-.escondido {
-    display: none;
-}
-
-.modal {
-    display: none;
-    align-self: center;
-    bottom: 3em;
-    flex-direction: column;
-    justify-content: center;
-    position: absolute;
     border-radius: 1em;
+    background-color: white;
+    overflow: hidden;
+}
+.progressBar {
+    display: flex;
+    margin-right: auto;
+    background-color: rgb(38, 197, 38);
+    height: 100%;
+    transition: 1s;
 }
 
-.texto-modal {
-    text-align: center;
-    font-size: x-large;
-    color: red;
+.progressCountDiv {
+    position: absolute;
+    display: flex;
+    gap: 1em;
 }
 
-.visible {
+.open {
     display: flex;
 }
 
-.checkbox-concluido {
-    background-color: green;
+.completed {
+    background-color: rgb(32, 175, 32);
+}
+
+.completed p {
     color: white;
     text-decoration: line-through;
 }
 
-.barra-progresso {
-    position: relative;
+.frequencyContainer {
     display: flex;
-    gap: 1em;
+    gap: .25em;
+}
+
+.dayContainer {
+    display: flex;
+    flex-direction: column;
+    width: .75em;
     align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 1.5em;
-    padding: 2px;
-    border-radius: 1em;
+    color: rgb(109, 109, 109);
+}
+
+.dayPoint {
+    height: .25em;
+    width: .25em;
+    aspect-ratio: 2/2;
+    border-radius: 50%;
+}
+
+.onDayPoint {
+    background-color: black;
+}
+
+.onDay {
     color: black;
-    box-sizing: border-box;
-    border: solid 1px;
-    background-color: white;
-    overflow: hidden;
-}
-
-.barra-preenchida {
-    position: absolute;
-    display: flex;
-    justify-content: start;
-    left: 0;
-    height: 100%;
-    background-color: rgb(51, 184, 51);
-    transition: 1s;
-
-}
-
-.barra-progresso p {
-    z-index: 1;
-}
-
-.progresso {
-    margin-left: 1em;
-    z-index: 1;
 }
