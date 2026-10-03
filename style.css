@@ -73,6 +73,10 @@ body {
     margin: 0.25em 0;
 }
 
+.listItem[hidden] {
+    display: none;
+}
+
 .listItem p {
     margin-left: 1em;
     margin-right: auto;
@@ -110,7 +114,7 @@ body {
 .progressBar {
     display: flex;
     margin-right: auto;
-    background-color: rgb(38, 197, 38);
+    background-color: rgb(109, 236, 109);
     height: 100%;
     transition: 1s;
 }
@@ -126,7 +130,7 @@ body {
 }
 
 .completed {
-    background-color: rgb(32, 175, 32);
+    background-color: rgb(85, 211, 85);
 }
 
 .completed p {
@@ -160,4 +164,23 @@ body {
 
 .onDay {
     color: black;
+}
+
+.filtersHabit {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.filtersHabit legend {
+    margin-right: 2em;
+    border-bottom: solid 1px;
+    width: 100%;
+}
+.filtersHabit div {
+    margin-top: 5px;
+}
+
+.filtersHabit input {
+    margin-right: auto;
 }

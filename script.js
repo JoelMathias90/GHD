@@ -2,7 +2,7 @@ const habits = [
     {
         id: crypto.randomUUID(),
         title: "Reunião colaborativa",
-        frequency: ["0", '3', "6"],
+        frequency: ["0", "3", "6"],
         completedDates: []
     }
 ]
@@ -17,6 +17,8 @@ const habitTitleInput = document.getElementById("habitTitleInput")
 const habitFrequencyInputs = document.getElementsByName("habitFrequencyInput")
 const submitHabitButton = document.getElementById("submitHabitButton")
 const cancelHabitButton = document.getElementById("cancelHabitButton")
+const filterCurrentDate = document.getElementById("filterCurrentDate")
+
 const currentDate = new Date()
 const currentDateFormatted = currentDate.toLocaleDateString()
 const frequencyDays = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"]
@@ -47,6 +49,7 @@ function createHabitElement(habit) {
 
     })
 
+    li.id = "listItem"
     li.className = "listItem"
     li.dataset.id = id
     input.type = "checkbox"
@@ -60,14 +63,14 @@ function createHabitElement(habit) {
     return li
 }
 
-function renderListHabits() {
+function renderListHabits(habits) {
     listHabits.replaceChildren()
     habits.forEach((habit) => {
         const habitItem = createHabitElement(habit)
         listHabits.appendChild(habitItem)
     })
 }
-renderListHabits()
+renderListHabits(habits)
 
 function toggleHabitCompletion(habit) {
     if (!habit.completedDates.includes(currentDateFormatted)) {
@@ -102,6 +105,16 @@ function updateProgressBar() {
 }
 updateProgressBar()
 
+
+function filterHabitsByToday(habits, container) {
+    const today = new Date().getDay();    
+    habits.forEach(habit => {
+        const element = container.querySelector(`[data-id="${habit.id}"]`);
+        const shouldShow = habit.frequency.includes(String(today));        
+        element.hidden = !shouldShow;
+    });
+}
+
 addHabitButton.addEventListener("click", () => {
     addHabitForm.classList.add("open")
 })
@@ -123,6 +136,10 @@ submitHabitButton.addEventListener("click", (event) => {
 
     addHabit(habit)
     updateProgressBar()
+    console.log(filterCurrentDate.checked);
+    
+    if(filterCurrentDate.checked) filterHabitsByToday(habits, listHabits)
+    
 })
 
 cancelHabitButton.addEventListener("click", () => {
@@ -138,5 +155,13 @@ listHabits.addEventListener("click", (event) => {
         toggleHabitCompletion(habit)
         renderHabit(habit, item)
         updateProgressBar()
+    }
+})
+
+filterCurrentDate.addEventListener("click", (event) => {
+    filterHabitsByToday(habits, listHabits)
+    if (event.target.checked === false) {
+        const items = listHabits.querySelectorAll("#listItem")
+        items.forEach(item => item.hidden = false)
     }
 })
