@@ -1,12 +1,3 @@
-const habits = [
-    {
-        id: crypto.randomUUID(),
-        title: "Reunião colaborativa",
-        frequency: ["0", "3", "6"],
-        completedDates: []
-    }
-]
-
 const listHabits = document.getElementById("listHabits")
 const progressContainer = document.getElementById("progressContainer")
 const progressBar = document.getElementById("progressBar")
@@ -22,6 +13,7 @@ const filterCurrentDate = document.getElementById("filterCurrentDate")
 const currentDate = new Date()
 const currentDateFormatted = currentDate.toLocaleDateString()
 const frequencyDays = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"]
+const storageParsed = localStorage.getItem("habits") ? JSON.parse(localStorage.getItem("habits")) : []
 
 function createHabitElement(habit) {
     const { id, title, frequency } = habit
@@ -42,7 +34,7 @@ function createHabitElement(habit) {
         dayContainer.append(dayPoint, span)
         div.append(dayContainer)
 
-        if (frequency.includes(index.toString())) {
+        if (frequency.includes(String(index))) {
             dayPoint.classList.add("onDayPoint")
             span.classList.add("onDay")
         }
@@ -57,31 +49,32 @@ function createHabitElement(habit) {
     p.textContent = title
     div.className = "frequencyContainer"
 
-    renderHabit(habit, li)
-
     li.append(input, p, div)
     return li
 }
 
-function renderListHabits(habits) {
+function renderListHabits(storageParsed) {
     listHabits.replaceChildren()
-    habits.forEach((habit) => {
+    storageParsed.forEach((habit) => {
         const habitItem = createHabitElement(habit)
         listHabits.appendChild(habitItem)
+        renderHabit(habit)
     })
 }
-renderListHabits(habits)
+renderListHabits(storageParsed)
 
 function toggleHabitCompletion(habit) {
-    if (!habit.completedDates.includes(currentDateFormatted)) {
-        habit.completedDates.push(currentDateFormatted)
+    const item = storageParsed.find(item => item.id === habit.id)
+
+    if (item.completedDates.includes(currentDateFormatted)) {
+        habit.completedDates = habit.completedDates.filter(day => day !== currentDateFormatted)
     } else {
-        habit.completedDates = habit.completedDates.filter((completed) => completed !== currentDateFormatted)
+        habit.completedDates.push(currentDateFormatted)
     }
+    localStorage.setItem("habits", JSON.stringify(storageParsed))
 }
 
 function addHabit(habit) {
-    habits.push(habit)
     const newHabit = createHabitElement(habit)
     listHabits.appendChild(newHabit)
     addHabitForm.reset()
@@ -89,15 +82,20 @@ function addHabit(habit) {
     listHabits.classList.add("open")
 }
 
-function renderHabit(habit, item) {
+function renderHabit(habit) {    
+    const item = listHabits.querySelector(`[data-id="${habit.id}"]`);
+    
     if (habit.completedDates.includes(currentDateFormatted)) {
         item.classList.add("completed")
-        item.checked = true
-    } else item.classList.remove("completed")
+        item.children[0].checked = true
+    } else {
+        item.classList.remove("completed")
+        item.children[0].checked = false
+    }
 }
 
 function updateProgressBar() {
-    const goal = habits.filter((habit) => habit.frequency.includes(currentDate.getDay().toString()))
+    const goal = storageParsed.filter((habit) => habit.frequency.includes(currentDate.getDay().toString()))
     const progress = goal.filter((habit) => habit.completedDates.includes(currentDateFormatted))
     const progressRate = goal.length > 0 ? (progress.length / goal.length) * 100 : 0
     progressCount.textContent = progress.length + "  /  " + goal.length
@@ -107,10 +105,10 @@ updateProgressBar()
 
 
 function filterHabitsByToday(habits, container) {
-    const today = new Date().getDay();    
+    const today = new Date().getDay();
     habits.forEach(habit => {
         const element = container.querySelector(`[data-id="${habit.id}"]`);
-        const shouldShow = habit.frequency.includes(String(today));        
+        const shouldShow = habit.frequency.includes(String(today));
         element.hidden = !shouldShow;
     });
 }
@@ -133,13 +131,15 @@ submitHabitButton.addEventListener("click", (event) => {
         frequency,
         completedDates: []
     }
+    storageParsed.push(habit)
+    const storageStringfy = JSON.stringify(storageParsed)
+    localStorage.setItem("habits", storageStringfy)
+    console.log(storageParsed);
 
     addHabit(habit)
     updateProgressBar()
-    console.log(filterCurrentDate.checked);
-    
-    if(filterCurrentDate.checked) filterHabitsByToday(habits, listHabits)
-    
+    if (filterCurrentDate.checked) filterHabitsByToday(storageParsed, listHabits)
+
 })
 
 cancelHabitButton.addEventListener("click", () => {
@@ -150,7 +150,7 @@ listHabits.addEventListener("click", (event) => {
     if (event.target.matches(('input[type="checkbox"]'))) {
         const item = event.target.closest(".listItem")
         const itemId = item.dataset.id
-        const habit = habits.find((habit) => habit.id === itemId)
+        const habit = storageParsed.find((habit) => habit.id === itemId)
 
         toggleHabitCompletion(habit)
         renderHabit(habit, item)
@@ -159,7 +159,7 @@ listHabits.addEventListener("click", (event) => {
 })
 
 filterCurrentDate.addEventListener("click", (event) => {
-    filterHabitsByToday(habits, listHabits)
+    filterHabitsByToday(storageParsed, listHabits)
     if (event.target.checked === false) {
         const items = listHabits.querySelectorAll("#listItem")
         items.forEach(item => item.hidden = false)
