@@ -192,3 +192,83 @@ body {
 .filtersHabit input {
     margin-right: auto;
 }
+
+.editButton {
+    height: 2em;
+    width: 2em;
+    margin-left: 2em;
+    border-radius: 50%;
+    font-size: small;
+    cursor: pointer;
+    border: black solid 1px;
+}
+
+.outBlack {
+    display: flex;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.911);
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.outBlack[hidden] {
+    position: relative;
+    display: none;
+}
+
+.divModal {
+    position: absolute;
+    width: 600px;
+    height: 60px;
+    position: relative;
+    display: flex;
+    background-color: gray;
+    border-radius: 25px;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.titleInputEdit {
+    height: 3em;
+    width: 300px;
+    padding: 1em;
+    border: 0;
+    box-shadow:  0px 3px 4px ;
+    background-color: transparent;
+    border-radius: 50px;
+    background-color: rgba(116, 115, 115, 0.418);
+    /* border-bottom: 2px solid black; */
+}
+
+.divContainerEdit {
+    display: flex;
+    gap: .5em;
+}
+
+.divContainerEdit div {
+    display: flex;
+    flex-direction: column;
+}
+
+.divSubmitButton, .divCancelButton, .divExcluirButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 100%;
+    border: none;
+    cursor: pointer;
+    background-color: rgb(79, 255, 79);
+    box-sizing: border-boxq;
+}
+.divCancelButton {
+    background-color: white;
+}
+
+.divExcluirButton {
+    text-align: center;
+    background-color: red;
+}
